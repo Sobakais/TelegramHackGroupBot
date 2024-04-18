@@ -12,7 +12,7 @@ async def main():
 
     dp.include_routers(
         add_hack.router,
-        # edit_hack.router,
+        edit_hack.router,
         show_hacks.router,
         delete_hack.router,
         start.router,
