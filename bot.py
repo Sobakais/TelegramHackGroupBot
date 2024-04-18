@@ -1,28 +1,26 @@
 import asyncio
 from aiogram import Bot, Dispatcher
-from handlers import start, command, all_text
-from handlers.commands.hack_menu import fsm_callback
-from handlers.commands.hack_menu import show_hacks as csh
-from handlers.commands.hack_menu import delete_hack
+from handlers import start, command, all_text, voice_messages
+from handlers.commands.hack_menu import show_hacks, delete_hack, add_hack, edit_hack
 from resources import config as cfg
-
-bot = Bot(token=cfg.BOT_TOKEN)
 
 
 async def main():
+    bot = Bot(token=cfg.BOT_TOKEN)
     dp = Dispatcher()
     # Запуск бота
 
     dp.include_routers(
-        fsm_callback.router,
-        csh.router,
+        add_hack.router,
+        # edit_hack.router,
+        show_hacks.router,
         delete_hack.router,
         start.router,
         command.router,
+        voice_messages.router,
         all_text.router,
     )
-    # Запускаем бота и пропускаем все накопленные входящие
-    # Да, этот метод можно вызвать даже если у вас поллинг
+
     await bot.delete_webhook(drop_pending_updates=True)
     await dp.start_polling(bot)
 

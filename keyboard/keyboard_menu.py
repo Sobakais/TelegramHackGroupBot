@@ -14,8 +14,7 @@ def get_menu():
             text="Ближайшие хакатоны", callback_data="menu_hack_closest"
         ),
     )
-    builder.row(types.InlineKeyboardButton(
-        text="Отмена", callback_data="menu_cancel"))
+    builder.row(types.InlineKeyboardButton(text="Отмена", callback_data="menu_cancel"))
     return builder.as_markup()
 
 
@@ -26,13 +25,19 @@ def menu_hack():
         types.InlineKeyboardButton(
             text="Добавить хакатон", callback_data="menu_hack_add"
         ),
+    )
+    builder.row(
+        types.InlineKeyboardButton(
+            text="Редактировать хакатон", callback_data="menu_hack_edit"
+        ),
+    )
+    builder.row(
         types.InlineKeyboardButton(
             text="Удалить хакатон", callback_data="menu_hack_delete"
         ),
     )
     builder.row(
-        types.InlineKeyboardButton(
-            text="Назад", callback_data="return_to_menu")
+        types.InlineKeyboardButton(text="Назад", callback_data="return_to_menu")
     )
     return builder.as_markup()
 
@@ -45,7 +50,6 @@ def menu_hack_closest():
         )
     )
     builder.row(
-        types.InlineKeyboardButton(
-            text="Назад", callback_data="return_to_menu")
+        types.InlineKeyboardButton(text="Назад", callback_data="return_to_menu")
     )
     return builder.as_markup()

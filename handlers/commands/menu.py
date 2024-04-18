@@ -1,6 +1,6 @@
 from aiogram import Router, F
-from aiogram.types import Message
 from aiogram.filters import Command, CommandObject
+from aiogram.types import Message, InlineKeyboardButton
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 import keyboard.keyboard_menu as kb
 
@@ -14,17 +14,25 @@ async def update(message: Message, text: str, markup: InlineKeyboardBuilder = No
 
 @router.message(Command("help", prefix="!"))
 async def show_help(message: Message, command: CommandObject):
-    await message.answer("""
+    builder = InlineKeyboardBuilder()
+    builder.row(InlineKeyboardButton(
+        text="Закрыть", callback_data="close_data"))
+    await message.delete()
+    await message.answer(
+        """
         Доступные комманды:
           !menu - показать меню
           !change_nick <ник> - сменить имя
           !show_nicks - показать все ники в БД
           !get_nick - узнать свой ник
-    """)
+    """,
+        reply_markup=builder.as_markup(),
+    )
 
 
 @router.message(Command("menu", prefix="!"))
 async def show_menu(message: Message):
+    await message.delete()
     await message.answer("Menu", reply_markup=kb.get_menu())
 
 
@@ -32,7 +40,7 @@ async def show_menu(message: Message):
 async def menu_callback(call: Message):
     out = "_".join(call.data.split("_")[1:])
     if out == "hack":
-        await update(call.message, "------------------", markup=kb.menu_hack())
+        await update(call.message, "Управление хакатонами", markup=kb.menu_hack())
     if out == "hack_closest":
         await update(call.message, "Хаки (ближайшее)", markup=kb.menu_hack_closest())
     if out == "cancel":
