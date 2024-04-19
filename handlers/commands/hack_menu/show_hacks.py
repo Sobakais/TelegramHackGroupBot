@@ -13,7 +13,8 @@ async def menu_show_closest(call: Message):
     res = ""
     builder = InlineKeyboardBuilder()
     builder.row(
-        types.InlineKeyboardButton(text="Назад", callback_data="return_to_menu")
+        types.InlineKeyboardButton(
+            text="Назад", callback_data="return_to_menu")
     )
     if req:
         hacks = sorted(req, key=lambda x: (x[3], x[2], x[1]))

@@ -41,8 +41,6 @@ async def menu_callback(call: Message):
     out = "_".join(call.data.split("_")[1:])
     if out == "hack":
         await update(call.message, "Управление хакатонами", markup=kb.menu_hack())
-    if out == "hack_closest":
-        await update(call.message, "Хаки (ближайшее)", markup=kb.menu_hack_closest())
     if out == "cancel":
         await call.message.delete()
     await call.answer()

@@ -104,8 +104,6 @@ async def edit_state(callback: Message, state: FSMContext):
         db.set_hack_status(rowid, "🤝")
     if command == "prizes":
         db.set_hack_status(rowid, "🏆")
-    await state.clear()
-    await state.update_data(option_capture=rowid)
     await state.set_state(Hack_to_edit.hack_edit)
     hack = db.get_hack(rowid)
     await callback.answer()
@@ -119,8 +117,6 @@ async def edit_name(message: Message, state: FSMContext):
     data = await state.get_data()
     rowid = data.get("option_capture")
     db.set_hack_name(rowid, message.text)
-    await state.clear()
-    await state.update_data(option_capture=rowid)
     await state.set_state(Hack_to_edit.hack_edit)
     hack = db.get_hack(rowid)
     await message.answer(
@@ -150,8 +146,6 @@ async def edit_date(message: Message, state: FSMContext):
     data = await state.get_data()
     rowid = data.get("option_capture")
     db.set_hack_date(rowid, hdate)
-    await state.clear()
-    await state.update_data(option_capture=rowid)
     await state.set_state(Hack_to_edit.hack_edit)
     hack = db.get_hack(rowid)
     await message.answer(
@@ -164,8 +158,6 @@ async def edit_description(message: Message, state: FSMContext):
     data = await state.get_data()
     rowid = data.get("option_capture")
     db.set_hack_description(rowid, message.text)
-    await state.clear()
-    await state.update_data(option_capture=rowid)
     await state.set_state(Hack_to_edit.hack_edit)
     hack = db.get_hack(rowid)
     await message.answer(

@@ -18,6 +18,11 @@ def init_db(members):
         name text,
         description text,
         state text DEFAULT '🚫')""")
+
+        cursor.execute(""" CREATE TABLE IF NOT EXISTS responses(
+        id INTEGER PRIMARY KEY,
+        respondlist TEXT NOT NULL)""")
+
         cursor.executemany(
             "INSERT OR REPLACE INTO users (id, nickname) VALUES (?, ?)", members
         )
@@ -26,20 +31,19 @@ def init_db(members):
 def add_respond(userid, lines):
     with sq.connect(path_to_db) as con:
         cursor = con.cursor()
-        cursor.execute("""
-        CREATE TABLE IF NOT EXISTS responses(
-            id INTEGER PRIMARY KEY,
-            respondlist TEXT NOT NULL)""")
         cursor.execute(
-            "INSERT OR REPLACE INTO responses VALUES (?, ?)", (userid, "_".join(lines))
+            f"""INSERT OR REPLACE INTO responses (respondlist) VALUES (?) WHERE id = {userid}""",
+            lines,
         )
 
 
 def get_responds(userid):
     with sq.connect(path_to_db) as con:
         cursor = con.cursor()
-        cursor.execute(f"SELECT respondlist FROM responses WHERE id = {userid}")
-        cursor.execute(f"SELECT respondlist FROM responses WHERE id = {userid}")
+        cursor.execute(
+            f"SELECT respondlist FROM responses WHERE id = {userid}")
+        cursor.execute(
+            f"SELECT respondlist FROM responses WHERE id = {userid}")
 
         responds = cursor.fetchone()
         if responds is None:
@@ -63,14 +67,16 @@ def set_chance(tgid, chance):
             )
         else:
             cursor.execute(
-                "UPDATE users SET chanceFuck = ? WHERE nickname = ?", (chance, tgid)
+                "UPDATE users SET chanceFuck = ? WHERE nickname = ?", (
+                    chance, tgid)
             )
 
 
 def chng_nick(tgid, newNick):
     with sq.connect(path_to_db) as con:
         cursor = con.cursor()
-        cursor.execute("UPDATE users SET nickname = ? WHERE id = ?", (newNick, tgid))
+        cursor.execute(
+            "UPDATE users SET nickname = ? WHERE id = ?", (newNick, tgid))
 
 
 def get_nick(tgid):
@@ -114,7 +120,8 @@ def get_hacks():
 def get_hack(rowid):
     with sq.connect(path_to_db) as con:
         cursor = con.cursor()
-        cursor.execute("SELECT rowid, * FROM hacks WHERE rowid = ?", (str(rowid)))
+        cursor.execute(
+            "SELECT rowid, * FROM hacks WHERE rowid = ?", (str(rowid)))
         hack = cursor.fetchone()
         return hack
 
@@ -122,7 +129,8 @@ def get_hack(rowid):
 def set_hack_name(rowid, name):
     with sq.connect(path_to_db) as con:
         cursor = con.cursor()
-        cursor.execute("UPDATE hacks SET name = ? WHERE rowid = ?", (name, rowid))
+        cursor.execute(
+            "UPDATE hacks SET name = ? WHERE rowid = ?", (name, rowid))
 
 
 def set_hack_date(rowid, date):
@@ -138,17 +146,18 @@ def set_hack_description(rowid, description):
     with sq.connect(path_to_db) as con:
         cursor = con.cursor()
         cursor.execute(
-            "UPDATE hacks SET description = ? WHERE rowid = ?", (description, rowid)
+            "UPDATE hacks SET description = ? WHERE rowid = ?", (
+                description, rowid)
         )
 
 
 def set_hack_status(rowid, status):
     with sq.connect(path_to_db) as con:
         cursor = con.cursor()
-        cursor.execute("UPDATE hacks SET state = ? WHERE rowid = ?", (status, rowid))
-
-
-def delete_hack(rowid):
+        cursor.execute(
+            "UPDATE hacks SET state = ? WHERE rowid = ?", (status, rowid))
+        cursor = con.cursor()
+        cursor.execute("DELETE FROM hacks WHERE rowid = ?", (rowid))
     with sq.connect(path_to_db) as con:
         cursor = con.cursor()
         cursor.execute("DELETE FROM hacks WHERE rowid = ?", (rowid))
